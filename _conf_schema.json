@@ -1,0 +1,32 @@
+{
+  "cf_account_id": {
+    "type": "string",
+    "description": "Cloudflare Account ID",
+    "hint": "在 Cloudflare Dashboard 右侧找到",
+    "default": ""
+  },
+  "cf_api_token": {
+    "type": "string",
+    "description": "Cloudflare API Token（需要 Workers AI Read 权限）",
+    "hint": "在 https://dash.cloudflare.com/profile/api-tokens 创建",
+    "default": ""
+  },
+  "ffmpeg_path": {
+    "type": "string",
+    "description": "FFmpeg 可执行文件路径（留空则自动检测）",
+    "hint": "如 C:\\ffmpeg\\bin\\ffmpeg.exe，留空自动查找",
+    "default": ""
+  },
+  "max_audio_minutes": {
+    "type": "int",
+    "description": "最大支持音频时长（分钟），超出将截断",
+    "hint": "建议不超过30分钟，避免超出免费额度",
+    "default": 30
+  },
+  "summary_prompt": {
+    "type": "string",
+    "description": "视频总结的系统提示词",
+    "hint": "自定义LLM总结时的提示词",
+    "default": "请对以下视频转录文本进行总结。要求：\n1. 用中文总结\n2. 提取核心观点和关键信息\n3. 分点列出要点\n4. 如果有具体数据请保留\n5. 最后给出简短的一句话总结"
+  }
+}
