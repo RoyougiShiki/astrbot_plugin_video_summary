@@ -1,6 +1,6 @@
 name: astrbot_plugin_video_summary
-desc: 视频总结插件 - 支持无字幕视频：FFmpeg提取音频 → Cloudflare Whisper语音转文字 → LLM总结。新增B站链接/BV号/QQ小程序卡片自动解析。
-help: 发送视频文件、B站链接，或使用 /videosum 命令总结视频内容
-version: 0.2.0
+desc: 视频总结插件 - FFmpeg提取音频 → Cloudflare Whisper语音转文字 → LLM总结。支持B站链接/BV号/QQ小程序卡片自动解析，支持UP主订阅通知。
+help: 发送视频文件、B站链接，或使用 /videosum 总结视频；/vsub 订阅UP主新视频通知
+version: 0.3.0
 author: RoyougiShiki
 repo: https://github.com/RoyougiShiki/astrbot_plugin_video_summary

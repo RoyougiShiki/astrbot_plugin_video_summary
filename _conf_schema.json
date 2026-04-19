@@ -34,5 +34,11 @@
     "description": "下载 B站视频时使用的代理（可选）",
     "hint": "如 http://127.0.0.1:7890，不需要请留空",
     "default": ""
+  },
+  "listen_interval": {
+    "type": "int",
+    "description": "订阅轮询间隔（秒），检查 UP 主是否有新视频",
+    "hint": "建议 300（5分钟），最小 60",
+    "default": 300
   }
 }

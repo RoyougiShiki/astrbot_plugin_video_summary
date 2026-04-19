@@ -61,6 +61,56 @@ class BiliClient:
         return None
 
     @staticmethod
+    async def get_user_info(uid: int) -> Optional[dict]:
+        """获取 B站用户基本信息
+        
+        优先使用搜索 API（不需要 wbi 签名），
+        失败时回退到用户信息 API。
+        """
+        headers = {
+            "User-Agent": (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/91.0.4472.124 Safari/537.36"
+            ),
+            "Referer": "https://www.bilibili.com",
+        }
+        
+        # 方法1: 用搜索 API 查找用户（不需要 wbi 签名）
+        # 关键：用 "uid{数字}" 搜索才能在 bili_user 结果中找到
+        try:
+            search_url = f"https://api.bilibili.com/x/web-interface/search/all/v2?keyword=uid{uid}"
+            async with aiohttp.ClientSession() as session:
+                async with session.get(search_url, headers=headers, timeout=10) as resp:
+                    data = await resp.json()
+                    if data.get("code") == 0:
+                        for group in data.get("data", {}).get("result", []):
+                            if group.get("result_type") == "bili_user":
+                                for item in group.get("data", []):
+                                    if int(item.get("mid", 0)) == uid:
+                                        return {
+                                            "name": item.get("uname", ""),
+                                            "mid": uid,
+                                            "face": item.get("upic", ""),
+                                        }
+        except Exception as e:
+            logger.debug(f"搜索 API 获取用户信息失败 ({uid}): {e}")
+        
+        # 方法2: 回退到用户信息 API
+        try:
+            api_url = f"https://api.bilibili.com/x/space/wbi/acc/info?mid={uid}"
+            async with aiohttp.ClientSession() as session:
+                async with session.get(api_url, headers=headers, timeout=10) as resp:
+                    data = await resp.json()
+                    if data.get("code") == 0:
+                        return data.get("data", {})
+        except Exception as e:
+            logger.debug(f"用户信息 API 获取失败 ({uid}): {e}")
+        
+        # 方法3: 如果都失败了，返回仅含 UID 的基本信息
+        return {"name": str(uid), "mid": uid}
+
+    @staticmethod
     async def get_video_info(bvid: str) -> Optional[dict]:
         """获取 B站视频基本信息"""
         api_url = f"https://api.bilibili.com/x/web-interface/view?bvid={bvid}"
